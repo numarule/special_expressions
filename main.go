@@ -18,11 +18,17 @@ var zRe = fmt.Sprintf(numRe_fmt, "Z")
 var positionRe_fmt = fmt.Sprintf("(?P<Position>\\(\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*\\))", xRe, yRe, zRe)
 var playerRe_fmt = fmt.Sprintf("(?P<Player>Player:\\s*%s\\s*-\\s*Position:\\s*%s)", nameRe, positionRe_fmt)
 
-type MatchMap[V string | *MatchMap] map[string]V
-type MatchMapString MatchMap[string]
+//PROBLEM: Can't create a recursive type
 
-func CreateMatchMap(re *regexp.Regexp, matches []string) MatchMapString {
-	matchMap := make(MatchMapString, re.NumSubexp())
+//Current thoughts
+//Interface? on addressable or j
+
+//Addressable == returns a string of its own full match and/or can be addressed into further
+
+type MatchMap map[string]string
+
+func CreateMatchMap(re *regexp.Regexp, matches []string) MatchMap {
+	matchMap := make(MatchMap, re.NumSubexp())
 	for i, matchName := range re.SubexpNames() {
 		matchMap[matchName] = matches[i]
 	}
